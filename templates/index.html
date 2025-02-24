@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphing Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { display: flex; gap: 20px; justify-content: space-between; }
+        .input-panel, .graph-panel {
+            background: white; padding: 20px; border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .input-panel { width: 40%; }
+        .graph-panel { width: 55%; }
+        .graph-container { height: 400px; }
+        button { padding: 10px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .remove-btn { margin-left: 10px; color: red; cursor: pointer; }
+        .new-graph-btn { background-color: #FF5733; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Input panel -->
+        <div class="input-panel">
+            <h1>Graphing Calculator</h1>
+
+            {% if graph_id %}
+                <p>Graph ID: <strong>{{ graph_id }}</strong></p>
+                <a href="{{ url_for('graph', graph_id=graph_id) }}" target="_blank">View Saved Graph</a>
+            {% endif %}
+
+            <form method="POST">
+                <label for="expression">Enter equation (e.g., sin(x), cos(x), x**2):</label>
+                <input type="text" name="expression" placeholder="e.g., sin(x)" required>
+                <button type="submit" name="action" value="add">Add Equation</button>
+            </form>
+
+            <form method="POST">
+                <button type="submit" name="action" value="new" class="new-graph-btn">New Graph</button>
+            </form>
+
+            <h3>Equations:</h3>
+            <ul>
+                {% for equation in equations %}
+                    <li>
+                        {{ equation }}
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="equation_index" value="{{ loop.index0 }}">
+                            <button type="submit" name="action" value="remove" class="remove-btn">Remove</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Graph panel -->
+        <div class="graph-panel">
+            <div class="graph-container">
+                {% if graph_html %}
+                    {{ graph_html|safe }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
