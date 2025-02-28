@@ -75,7 +75,7 @@ flask-graphing-calculator/
 │── static/              # Static files (CSS, JS, images)
 │── templates/           # HTML templates
 │   ├── index.html       # Main UI
-│── app.py               # Main Flask application
+│── main.py               # Main Flask application
 │── requirements.txt     # Dependencies
 │── README.md            # Project Documentation
 ```
